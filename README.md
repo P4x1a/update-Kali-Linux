@@ -41,37 +41,3 @@ echo "Cleaning package cache..."
 sudo apt-get clean
 
 echo "System updated successfully!"
-How to Use
-Clone the repository:
-
-bash
-git clone https://github.com/P4x1a/update-kali.git
-Navigate to the repository directory:
-
-bash
-cd update-kali
-Make the script executable:
-
-bash
-chmod +x update_kali.sh
-Execute the script:
-
-bash
-./update_kali.sh
-Contribution
-Contributions are welcome! Please follow these steps to contribute:
-
-Fork the project.
-
-Create a new branch (git checkout -b feature/AmazingFeature).
-
-Commit your changes (git commit -m 'Add some AmazingFeature').
-
-Push to the branch (git push origin feature/AmazingFeature).
-
-Open a Pull Request.
-
-License
-This project is licensed under the MIT License.
-
-Thank you for checking out this project! If you have any questions or suggestions, feel free to contact me.
