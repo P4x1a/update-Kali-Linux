@@ -57,9 +57,9 @@ sudo apt-get clean
 
 echo "System updated successfully!"
 ```
-### CONTRIBUTION_LICENSE.md (English)
+### CONTRIBUTION
 
-```markdown
+``markdown
 ## Contribution
 
 Contributions are welcome! Please follow these steps to contribute:
