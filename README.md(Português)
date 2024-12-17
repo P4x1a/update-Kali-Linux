@@ -1,0 +1,85 @@
+# 🛠️ Script de Automação de Atualização do Kali Linux
+
+Bem-vindo ao repositório do Script de Automação de Atualização do Kali Linux. Este projeto foi criado para simplificar o processo de manutenção e atualização do sistema Kali Linux utilizando um script Bash.
+
+## Descrição
+
+Este projeto inclui um script (`update_kali.sh`) que:
+1. Atualiza a lista de pacotes.
+2. Atualiza os pacotes instalados.
+3. Realiza uma atualização da distribuição.
+4. Remove pacotes desnecessários.
+5. Limpa o cache de pacotes.
+
+## Como Usar
+
+1. Baixe o arquivo bruto `update_kali.sh` do GitHub:
+    - [Baixar update_kali.sh](https://raw.githubusercontent.com/P4x1a/update-kali/main/update_kali.sh)
+
+2. Abra um terminal e navegue até o diretório onde o script foi baixado.
+
+3. Torne o script executável:
+    ```bash
+    chmod +x update_kali.sh
+    ```
+
+4. Execute o script:
+    ```bash
+    ./update_kali.sh
+    ```
+
+## Script
+
+### update_kali.sh
+
+```bash
+#!/bin/bash
+
+# Atualiza a lista de pacotes
+echo "Atualizando a lista de pacotes..."
+sudo apt-get update
+
+# Atualiza os pacotes instalados
+echo "Atualizando os pacotes instalados..."
+sudo apt-get upgrade -y
+
+# Atualiza a distribuição do sistema
+echo "Atualizando a distribuição do sistema..."
+sudo apt-get dist-upgrade -y
+
+# Remove pacotes desnecessários
+echo "Removendo pacotes desnecessários..."
+sudo apt-get autoremove -y
+
+# Limpa o cache de pacotes
+echo "Limpando o cache de pacotes..."
+sudo apt-get clean
+
+echo "Sistema atualizado com sucesso!"
+```
+
+### CONTRIBUIÇÃO
+
+Contribuições são bem-vindas! Por favor, siga os passos abaixo para contribuir:
+1. Faça um fork do projeto.
+2. Crie uma nova branch:
+    ```bash
+    git checkout -b feature/AmazingFeature
+    ```
+3. Commit suas mudanças:
+    ```bash
+    git commit -m 'Add some AmazingFeature'
+    ```
+4. Faça o push para a branch:
+    ```bash
+    git push origin feature/AmazingFeature
+    ```
+5. Abra um Pull Request.
+
+## Licença
+
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
+
+---
+
+Obrigado por conferir este projeto! Se tiver alguma dúvida ou sugestão, sinta-se à vontade para me contatar.
