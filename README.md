@@ -13,18 +13,16 @@ This project includes a script (`update_kali.sh`) that:
 
 ## How to Use
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/P4x1a/update-Kali-Linux/blob/main/update_kali.sh
-    ```
-2. Navigate to the repository directory:
-    ```bash
-    cd update-kali
-    ```
+1. Download the raw `update_kali.sh` script from GitHub:
+    - [Download update_kali.sh](https://raw.githubusercontent.com/P4x1a/update-kali/main/update_kali.sh)
+
+2. Open a terminal and navigate to the directory where the script was downloaded.
+
 3. Make the script executable:
     ```bash
     chmod +x update_kali.sh
     ```
+
 4. Execute the script:
     ```bash
     ./update_kali.sh
