@@ -15,7 +15,7 @@ This project includes a script (`update_kali.sh`) that:
 
 1. Clone the repository:
     ```bash
-    git clone (https://github.com/P4x1a/update-Kali-Linux/blob/main/update_kali.sh)
+    git clone https://github.com/P4x1a/update-Kali-Linux/blob/main/update_kali.sh
     ```
 2. Navigate to the repository directory:
     ```bash
