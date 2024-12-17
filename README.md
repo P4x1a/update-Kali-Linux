@@ -1,5 +1,5 @@
 README.md(English)
-markdown
+
 # 🛠️ Kali Linux Update Automation Script
 
 Welcome to the Kali Linux Update Automation Script repository. This project is designed to simplify the maintenance and update process of the Kali Linux system using a Bash script.
