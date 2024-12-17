@@ -14,7 +14,7 @@ Este projeto inclui um script (`update_kali.sh`) que:
 ## Como Usar
 
 1. Baixe o arquivo bruto `update_kali.sh` do GitHub:
-    - [Baixar update_kali.sh](https://raw.githubusercontent.com/P4x1a/update-kali/main/update_kali.sh)
+    - [Baixar update_kali.sh](https://github.com/P4x1a/update-Kali-Linux/blob/main/update_kali.sh)
 
 2. Abra um terminal e navegue até o diretório onde o script foi baixado.
 
