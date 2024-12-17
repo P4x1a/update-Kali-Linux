@@ -56,3 +56,33 @@ echo "Cleaning package cache..."
 sudo apt-get clean
 
 echo "System updated successfully!"
+```
+### CONTRIBUTION_LICENSE.md (English)
+
+```markdown
+## Contribution
+
+Contributions are welcome! Please follow these steps to contribute:
+1. Fork the project.
+2. Create a new branch:
+    ```bash
+    git checkout -b feature/AmazingFeature
+    ```
+3. Commit your changes:
+    ```bash
+    git commit -m 'Add some AmazingFeature'
+    ```
+4. Push to the branch:
+    ```bash
+    git push origin feature/AmazingFeature
+    ```
+5. Open a Pull Request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+Thank you for checking out this project! If you have any questions or suggestions, feel free to contact me.
+
