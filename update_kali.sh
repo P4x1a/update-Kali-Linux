@@ -1,24 +1,23 @@
 #!/bin/bash
 
-# Atualiza a lista de pacotes
-echo "Atualizando a lista de pacotes..."
+# Update package list
+echo "Updating package list..."
 sudo apt-get update
 
-# Atualiza os pacotes instalados
-echo "Atualizando os pacotes instalados..."
+# Upgrade installed packages
+echo "Upgrading installed packages..."
 sudo apt-get upgrade -y
 
-# Atualiza a distribuição do sistema
-echo "Atualizando a distribuição do sistema..."
+# Perform distribution upgrade
+echo "Performing distribution upgrade..."
 sudo apt-get dist-upgrade -y
 
-# Remove pacotes desnecessários
-echo "Removendo pacotes desnecessários..."
+# Remove unnecessary packages
+echo "Removing unnecessary packages..."
 sudo apt-get autoremove -y
 
-# Limpa o cache de pacotes
-echo "Limpando o cache de pacotes..."
+# Clean package cache
+echo "Cleaning package cache..."
 sudo apt-get clean
 
-echo "Sistema atualizado com sucesso!"
-
+echo "System updated successfully!"
