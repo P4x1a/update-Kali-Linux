@@ -14,21 +14,21 @@ This project includes a script (`update_kali.sh`) that:
 5. Cleans the package cache.
 
 #How to Use
-##Clone the repository:
-Bash
-git clone https://github.com/P4x1a/update-kali.git
+  Clone the repository:
+  Bash
+  git clone https://github.com/P4x1a/update-kali.git
 
-##Navigate to the repository directory:
-bash
-cd update-kali
+#Navigate to the repository directory:
+  bash
+  cd update-kali
 
-##Make the script executable:
-bash
-chmod +x update_kali.sh
+#Make the script executable:
+  bash
+  chmod +x update_kali.sh
 
 ##Execute the script:
-bash
-./update_kali.sh
+  bash
+  ./update_kali.sh
 
 Contribution
 Contributions are welcome! Please follow these steps to contribute:
