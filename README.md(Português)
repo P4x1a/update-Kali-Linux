@@ -1,6 +1,6 @@
 # 🛠️ Script de Automação de Atualização do Kali Linux
 
-Bem-vindo ao repositório do Script de Automação de Atualização do Kali Linux. Este projeto foi criado para simplificar o processo de manutenção e atualização do sistema Kali Linux utilizando um script Bash.
+Bem-vindo ao repositório do Script de Automação de Atualização do Kali Linux. Este projeto foi criado para simplificar o processo de manutenção e atualização do sistema Kali Linux usando um script Bash.
 
 ## Descrição
 
@@ -10,10 +10,12 @@ Este projeto inclui um script (`update_kali.sh`) que:
 3. Realiza uma atualização da distribuição.
 4. Remove pacotes desnecessários.
 5. Limpa o cache de pacotes.
+6. Oferece um menu interativo para selecionar operações individuais ou todas as operações.
+7. Corrige automaticamente interrupções do `dpkg` e dependências quebradas.
 
 ## Como Usar
 
-1. Baixe o arquivo bruto `update_kali.sh` do GitHub:
+1. Baixe o script `update_kali.sh` bruto do GitHub:
     - [Baixar update_kali.sh](https://github.com/P4x1a/update-Kali-Linux/blob/main/update_kali.sh)
 
 2. Abra um terminal e navegue até o diretório onde o script foi baixado.
@@ -25,7 +27,7 @@ Este projeto inclui um script (`update_kali.sh`) que:
 
 4. Execute o script:
     ```bash
-    ./update_kali.sh
+    ./update_kali.sh --menu
     ```
 
 ## Script
@@ -35,34 +37,125 @@ Este projeto inclui um script (`update_kali.sh`) que:
 ```bash
 #!/bin/bash
 
-# Atualiza a lista de pacotes
-echo "Atualizando a lista de pacotes..."
-sudo apt-get update
+# Função para mostrar o uso do script
+mostrar_uso() {
+    echo "Uso: $0 [opções]"
+    echo "Opções:"
+    echo "  -m, --menu           Exibir menu interativo"
+    echo "  -u, --update         Atualizar a lista de pacotes"
+    echo "  -g, --upgrade        Atualizar os pacotes instalados"
+    echo "  -d, --dist-upgrade   Realizar uma atualização da distribuição"
+    echo "  -r, --remove         Remover pacotes desnecessários"
+    echo "  -c, --clean          Limpar o cache de pacotes"
+    echo "  -a, --all            Realizar todas as operações acima"
+    echo "  -h, --help           Mostrar esta ajuda"
+}
 
-# Atualiza os pacotes instalados
-echo "Atualizando os pacotes instalados..."
-sudo apt-get upgrade -y
+# Verificar interrupções do dpkg e corrigi-las
+verificar_e_corrigir_dpkg() {
+    echo "Verificando e corrigindo interrupções do dpkg..."
+    sudo dpkg --configure -a
+    sudo apt-get check
+    if [ $? -ne 0 ]; então
+        echo "Existem pacotes quebrados. Tentando corrigi-los..."
+        sudo apt --fix-broken install -y
+        if [ $? -ne 0 ]; então
+            echo "Falha ao corrigir pacotes quebrados automaticamente. Por favor, corrija-os manualmente."
+            exit 1
+        fi
+    fi
+}
 
-# Atualiza a distribuição do sistema
-echo "Atualizando a distribuição do sistema..."
-sudo apt-get dist-upgrade -y
+# Funções para cada operação
+atualizar_lista_pacotes() {
+    echo "Atualizando a lista de pacotes..."
+    sudo apt-get update
+}
 
-# Remove pacotes desnecessários
-echo "Removendo pacotes desnecessários..."
-sudo apt-get autoremove -y
+atualizar_pacotes_instalados() {
+    echo "Atualizando os pacotes instalados..."
+    sudo apt-get upgrade -y
+}
 
-# Limpa o cache de pacotes
-echo "Limpando o cache de pacotes..."
-sudo apt-get clean
+atualizacao_distribuicao() {
+    echo "Realizando atualização da distribuição..."
+    sudo apt-get dist-upgrade -y
+}
+
+remover_pacotes_desnecessarios() {
+    echo "Removendo pacotes desnecessários..."
+    sudo apt-get autoremove -y
+}
+
+limpar_cache_pacotes() {
+    echo "Limpando o cache de pacotes..."
+    sudo apt-get clean
+}
+
+# Função para realizar todas as operações
+realizar_todas_as_operacoes() {
+    atualizar_lista_pacotes
+    atualizar_pacotes_instalados
+    atualizacao_distribuicao
+    remover_pacotes_desnecessarios
+    limpar_cache_pacotes
+}
+
+# Menu interativo
+exibir_menu() {
+    echo "Escolha uma das opções abaixo:"
+    echo "1. Atualizar a lista de pacotes"
+    echo "2. Atualizar os pacotes instalados"
+    echo "3. Realizar uma atualização da distribuição"
+    echo "4. Remover pacotes desnecessários"
+    echo "5. Limpar o cache de pacotes"
+    echo "6. Realizar todas as operações acima"
+    echo "0. Sair"
+    read -p "Digite sua escolha: " opcao
+    case $opcao in
+        1) atualizar_lista_pacotes ;;
+        2) atualizar_pacotes_instalados ;;
+        3) atualizacao_distribuicao ;;
+        4) remover_pacotes_desnecessarios ;;
+        5) limpar_cache_pacotes ;;
+        6) realizar_todas_as_operacoes ;;
+        0) exit 0 ;;
+        *) echo "Opção inválida"; exibir_menu ;;
+    esac
+}
+
+# Garantir que a configuração dpkg e dependências sejam corrigidas antes de prosseguir
+verificar_e_corrigir_dpkg
+
+# Processar argumentos
+if [ $# -eq 0 ]; então
+    mostrar_uso
+    exit 1
+fi
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -m | --menu )            exibir_menu; exit 0 ;;
+        -u | --update )          atualizar_lista_pacotes ;;
+        -g | --upgrade )         atualizar_pacotes_instalados ;;
+        -d | --dist-upgrade )    atualizacao_distribuicao ;;
+        -r | --remove )          remover_pacotes_desnecessarios ;;
+        -c | --clean )           limpar_cache_pacotes ;;
+        -a | --all )             realizar_todas_as_operacoes ;;
+        -h | --help )            mostrar_uso; exit 0 ;;
+        * )                      echo "Opção inválida: $1"; mostrar_uso; exit 1 ;;
+    esac
+    shift
+done
 
 echo "Sistema atualizado com sucesso!"
 ```
 
-### CONTRIBUIÇÃO
+## CONTRIBUIÇÃO
 
-Contribuições são bem-vindas! Por favor, siga os passos abaixo para contribuir:
+Contribuições são bem-vindas! Por favor, siga estes passos para contribuir:
 1. Faça um fork do projeto.
-2. Crie uma nova branch:
+2. Crie um novo branch:
     ```bash
     git checkout -b feature/AmazingFeature
     ```
@@ -70,7 +163,7 @@ Contribuições são bem-vindas! Por favor, siga os passos abaixo para contribui
     ```bash
     git commit -m 'Add some AmazingFeature'
     ```
-4. Faça o push para a branch:
+4. Push para o branch:
     ```bash
     git push origin feature/AmazingFeature
     ```
@@ -78,8 +171,9 @@ Contribuições são bem-vindas! Por favor, siga os passos abaixo para contribui
 
 ## Licença
 
-Este projeto está licenciado sob a [Licença MIT](LICENSE).
+Este projeto é licenciado sob a [Licença MIT](LICENSE).
 
 ---
 
-Obrigado por conferir este projeto! Se tiver alguma dúvida ou sugestão, sinta-se à vontade para me contatar.
+Obrigado por conferir este projeto! Se tiver alguma pergunta ou sugestão, sinta-se à vontade para entrar em contato.
+
