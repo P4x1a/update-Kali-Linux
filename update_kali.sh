@@ -4,6 +4,7 @@
 mostrar_uso() {
     echo "Uso: $0 [opções]"
     echo "Opções:"
+    echo "  -m, --menu           Exibir menu interativo"
     echo "  -u, --update         Atualizar a lista de pacotes"
     echo "  -g, --upgrade        Atualizar os pacotes instalados"
     echo "  -d, --dist-upgrade   Realizar uma atualização da distribuição"
@@ -11,12 +12,6 @@ mostrar_uso() {
     echo "  -c, --clean          Limpar o cache de pacotes"
     echo "  -h, --help           Mostrar esta ajuda"
 }
-
-# Verificar se nenhum argumento foi fornecido
-if [ $# -eq 0 ]; then
-    mostrar_uso
-    exit 1
-fi
 
 # Funções para cada operação
 atualizar_lista_pacotes() {
@@ -44,8 +39,8 @@ limpar_cache_pacotes() {
     sudo apt-get clean
 }
 
-# Exibir menu interativo se o argumento for "menu"
-if [ "$1" == "menu" ]; then
+# Menu interativo
+exibir_menu() {
     echo "Escolha uma das opções abaixo:"
     echo "1. Atualizar a lista de pacotes"
     echo "2. Atualizar os pacotes instalados"
@@ -53,7 +48,7 @@ if [ "$1" == "menu" ]; then
     echo "4. Remover pacotes desnecessários"
     echo "5. Limpar o cache de pacotes"
     echo "0. Sair"
-    read opcao
+    read -p "Digite sua escolha: " opcao
     case $opcao in
         1) atualizar_lista_pacotes ;;
         2) atualizar_pacotes_instalados ;;
@@ -61,22 +56,29 @@ if [ "$1" == "menu" ]; then
         4) remover_pacotes_desnecessarios ;;
         5) limpar_cache_pacotes ;;
         0) exit 0 ;;
-        *) echo "Opção inválida"; exit 1 ;;
+        *) echo "Opção inválida"; exibir_menu ;;
     esac
-else
-    # Processar argumentos
-    while [ "$1" != "" ]; do
-        case $1 in
-            -u | --update )          atualizar_lista_pacotes ;;
-            -g | --upgrade )         atualizar_pacotes_instalados ;;
-            -d | --dist-upgrade )    atualizacao_distribuicao ;;
-            -r | --remove )          remover_pacotes_desnecessarios ;;
-            -c | --clean )           limpar_cache_pacotes ;;
-            -h | --help )            mostrar_uso; exit 0 ;;
-            * )                      echo "Opção inválida: $1"; mostrar_uso; exit 1 ;;
-        esac
-        shift
-    done
+}
+
+# Verificar se nenhum argumento foi fornecido
+if [ $# -eq 0 ]; then
+    mostrar_uso
+    exit 1
 fi
+
+# Processar argumentos
+while [ "$1" != "" ]; do
+    case $1 in
+        -m | --menu )            exibir_menu; exit 0 ;;
+        -u | --update )          atualizar_lista_pacotes ;;
+        -g | --upgrade )         atualizar_pacotes_instalados ;;
+        -d | --dist-upgrade )    atualizacao_distribuicao ;;
+        -r | --remove )          remover_pacotes_desnecessarios ;;
+        -c | --clean )           limpar_cache_pacotes ;;
+        -h | --help )            mostrar_uso; exit 0 ;;
+        * )                      echo "Opção inválida: $1"; mostrar_uso; exit 1 ;;
+    esac
+    shift
+done
 
 echo "System updated successfully!"
