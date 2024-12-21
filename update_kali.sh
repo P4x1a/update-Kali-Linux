@@ -16,7 +16,13 @@ show_usage() {
 
 # Check for dpkg interruptions and fix them
 check_and_fix_dpkg() {
+    echo "Checking and fixing dpkg interruptions..."
     sudo dpkg --configure -a
+    sudo apt-get check
+    if [ $? -ne 0 ]; then
+        echo "There are broken packages. Please fix them manually."
+        exit 1
+    fi
 }
 
 # Functions for each operation
