@@ -88,7 +88,7 @@ display_menu() {
 }
 
 # Check if no arguments were provided
-if [ $# -eq 0 ]; então
+if [ $# -eq 0 ]; then
     show_usage
     exit 1
 fi
