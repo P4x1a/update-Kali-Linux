@@ -14,6 +14,14 @@ show_usage() {
     echo "  -h, --help           Show this help"
 }
 
+# Check for dpkg interruptions
+check_dpkg() {
+    if sudo dpkg --audit | grep -q "is broken"; then
+        echo "dpkg was interrupted. Running 'sudo dpkg --configure -a' to correct the problem..."
+        sudo dpkg --configure -a
+    fi
+}
+
 # Functions for each operation
 update_package_list() {
     echo "Updating package list..."
@@ -77,6 +85,9 @@ if [ $# -eq 0 ]; then
     show_usage
     exit 1
 fi
+
+# Check for dpkg interruptions
+check_dpkg
 
 # Process arguments
 while [ "$1" != "" ]; do
