@@ -85,7 +85,7 @@ display_menu() {
         0) exit 0 ;;
         *) echo "Invalid option"; display_menu ;;
     esac
-}
+done
 
 # Check if no arguments were provided
 if [ $# -eq 0 ]; then
