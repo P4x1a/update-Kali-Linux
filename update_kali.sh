@@ -88,12 +88,12 @@ display_menu() {
 }
 
 # Check if no arguments were provided
-if [ $# -eq 0 ]; then
+if [ $# -eq 0 ]; então
     show_usage
     exit 1
 fi
 
-# Ensure dpkg configuration is fixed before proceeding
+# Ensure dpkg configuration and dependencies are fixed before proceeding
 check_and_fix_dpkg
 
 # Process arguments
