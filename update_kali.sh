@@ -85,18 +85,17 @@ display_menu() {
         0) exit 0 ;;
         *) echo "Invalid option"; display_menu ;;
     esac
-done
-
-# Check if no arguments were provided
-if [ $# -eq 0 ]; then
-    show_usage
-    exit 1
-fi
+}
 
 # Ensure dpkg configuration and dependencies are fixed before proceeding
 check_and_fix_dpkg
 
 # Process arguments
+if [ $# -eq 0 ]; then
+    show_usage
+    exit 1
+fi
+
 while [ "$1" != "" ]; do
     case $1 in
         -m | --menu )            display_menu; exit 0 ;;
