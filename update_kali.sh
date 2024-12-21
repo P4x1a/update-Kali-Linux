@@ -1,82 +1,95 @@
 #!/bin/bash
 
-# Função para mostrar o uso do script
-mostrar_uso() {
-    echo "Uso: $0 [opções]"
-    echo "Opções:"
-    echo "  -m, --menu           Exibir menu interativo"
-    echo "  -u, --update         Atualizar a lista de pacotes"
-    echo "  -g, --upgrade        Atualizar os pacotes instalados"
-    echo "  -d, --dist-upgrade   Realizar uma atualização da distribuição"
-    echo "  -r, --remove         Remover pacotes desnecessários"
-    echo "  -c, --clean          Limpar o cache de pacotes"
-    echo "  -h, --help           Mostrar esta ajuda"
+# Function to show the script usage
+show_usage() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  -m, --menu           Display interactive menu"
+    echo "  -u, --update         Update package list"
+    echo "  -g, --upgrade        Upgrade installed packages"
+    echo "  -d, --dist-upgrade   Perform distribution upgrade"
+    echo "  -r, --remove         Remove unnecessary packages"
+    echo "  -c, --clean          Clean package cache"
+    echo "  -a, --all            Perform all the above operations"
+    echo "  -h, --help           Show this help"
 }
 
-# Funções para cada operação
-atualizar_lista_pacotes() {
+# Functions for each operation
+update_package_list() {
     echo "Updating package list..."
     sudo apt-get update
 }
 
-atualizar_pacotes_instalados() {
+upgrade_installed_packages() {
     echo "Upgrading installed packages..."
     sudo apt-get upgrade -y
 }
 
-atualizacao_distribuicao() {
+distribution_upgrade() {
     echo "Performing distribution upgrade..."
     sudo apt-get dist-upgrade -y
 }
 
-remover_pacotes_desnecessarios() {
+remove_unnecessary_packages() {
     echo "Removing unnecessary packages..."
     sudo apt-get autoremove -y
 }
 
-limpar_cache_pacotes() {
+clean_package_cache() {
     echo "Cleaning package cache..."
     sudo apt-get clean
 }
 
-# Menu interativo
-exibir_menu() {
-    echo "Escolha uma das opções abaixo:"
-    echo "1. Atualizar a lista de pacotes"
-    echo "2. Atualizar os pacotes instalados"
-    echo "3. Realizar uma atualização da distribuição"
-    echo "4. Remover pacotes desnecessários"
-    echo "5. Limpar o cache de pacotes"
-    echo "0. Sair"
-    read -p "Digite sua escolha: " opcao
-    case $opcao in
-        1) atualizar_lista_pacotes ;;
-        2) atualizar_pacotes_instalados ;;
-        3) atualizacao_distribuicao ;;
-        4) remover_pacotes_desnecessarios ;;
-        5) limpar_cache_pacotes ;;
+# Function to perform all operations
+perform_all_operations() {
+    update_package_list
+    upgrade_installed_packages
+    distribution_upgrade
+    remove_unnecessary_packages
+    clean_package_cache
+}
+
+# Interactive menu
+display_menu() {
+    echo "Choose an option below:"
+    echo "1. Update package list"
+    echo "2. Upgrade installed packages"
+    echo "3. Perform distribution upgrade"
+    echo "4. Remove unnecessary packages"
+    echo "5. Clean package cache"
+    echo "6. Perform all the above operations"
+    echo "0. Exit"
+    read -p "Enter your choice: " choice
+    case $choice in
+        1) update_package_list ;;
+        2) upgrade_installed_packages ;;
+        3) distribution_upgrade ;;
+        4) remove_unnecessary_packages ;;
+        5) clean_package_cache ;;
+        6) perform_all_operations ;;
         0) exit 0 ;;
-        *) echo "Opção inválida"; exibir_menu ;;
+        *) echo "Invalid option"; display_menu ;;
     esac
 }
 
-# Verificar se nenhum argumento foi fornecido
+# Check if no arguments were provided
 if [ $# -eq 0 ]; then
-    mostrar_uso
+    show_usage
     exit 1
 fi
 
-# Processar argumentos
+# Process arguments
 while [ "$1" != "" ]; do
     case $1 in
-        -m | --menu )            exibir_menu; exit 0 ;;
-        -u | --update )          atualizar_lista_pacotes ;;
-        -g | --upgrade )         atualizar_pacotes_instalados ;;
-        -d | --dist-upgrade )    atualizacao_distribuicao ;;
-        -r | --remove )          remover_pacotes_desnecessarios ;;
-        -c | --clean )           limpar_cache_pacotes ;;
-        -h | --help )            mostrar_uso; exit 0 ;;
-        * )                      echo "Opção inválida: $1"; mostrar_uso; exit 1 ;;
+        -m | --menu )            display_menu; exit 0 ;;
+        -u | --update )          update_package_list ;;
+        -g | --upgrade )         upgrade_installed_packages ;;
+        -d | --dist-upgrade )    distribution_upgrade ;;
+        -r | --remove )          remove_unnecessary_packages ;;
+        -c | --clean )           clean_package_cache ;;
+        -a | --all )             perform_all_operations ;;
+        -h | --help )            show_usage; exit 0 ;;
+        * )                      echo "Invalid option: $1"; show_usage; exit 1 ;;
     esac
     shift
 done
