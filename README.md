@@ -11,6 +11,7 @@ This project includes a script (`update_kali.sh`) that:
 4. Removes unnecessary packages.
 5. Cleans the package cache.
 6. Offers an interactive menu for selecting individual or all operations.
+7. Automatically fixes `dpkg` interruptions and broken dependencies.
 
 ## How to Use
 
@@ -48,6 +49,21 @@ show_usage() {
     echo "  -c, --clean          Clean package cache"
     echo "  -a, --all            Perform all the above operations"
     echo "  -h, --help           Show this help"
+}
+
+# Check for dpkg interruptions and fix them
+check_and_fix_dpkg() {
+    echo "Checking and fixing dpkg interruptions..."
+    sudo dpkg --configure -a
+    sudo apt-get check
+    if [ $? -ne 0 ]; then
+        echo "There are broken packages. Trying to fix them..."
+        sudo apt --fix-broken install -y
+        if [ $? -ne 0 ]; then
+            echo "Failed to fix broken packages automatically. Please fix them manually."
+            exit 1
+        fi
+    fi
 }
 
 # Functions for each operation
@@ -108,13 +124,15 @@ display_menu() {
     esac
 }
 
-# Check if no arguments were provided
+# Ensure dpkg configuration and dependencies are fixed before proceeding
+check_and_fix_dpkg
+
+# Process arguments
 if [ $# -eq 0 ]; then
     show_usage
     exit 1
 fi
 
-# Process arguments
 while [ "$1" != "" ]; do
     case $1 in
         -m | --menu )            display_menu; exit 0 ;;
@@ -159,6 +177,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 Thank you for checking out this project! If you have any questions or suggestions, feel free to contact me.
 
----
-
-If you need anything else, just let me know! 😊🚀
