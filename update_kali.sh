@@ -20,8 +20,12 @@ check_and_fix_dpkg() {
     sudo dpkg --configure -a
     sudo apt-get check
     if [ $? -ne 0 ]; then
-        echo "There are broken packages. Please fix them manually."
-        exit 1
+        echo "There are broken packages. Trying to fix them..."
+        sudo apt --fix-broken install -y
+        if [ $? -ne 0 ]; then
+            echo "Failed to fix broken packages automatically. Please fix them manually."
+            exit 1
+        fi
     fi
 }
 
