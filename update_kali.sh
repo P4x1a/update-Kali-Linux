@@ -14,17 +14,37 @@ show_usage() {
     echo "  -h, --help           Show this help"
 }
 
-# Check for dpkg interruptions and fix them
+# Function to detect package manager
+detect_package_manager() {
+    if command -v apt-get &> /dev/null; then
+        PM="apt-get"
+        DIST_UPGRADE="dist-upgrade"
+    elif command -v yum &> /dev/null; then
+        PM="yum"
+        DIST_UPGRADE="update"
+    elif command -v pacman &> /dev/null; then
+        PM="pacman"
+        DIST_UPGRADE="Syu"
+    else
+        echo "Unsupported package manager. This script supports apt-get, yum, and pacman."
+        exit 1
+    fi
+    echo "Detected package manager: $PM"
+}
+
+# Check for dpkg interruptions and fix them (only for apt-get)
 check_and_fix_dpkg() {
-    echo "Checking and fixing dpkg interruptions..."
-    sudo dpkg --configure -a
-    sudo apt-get check
-    if [ $? -ne 0 ]; then
-        echo "There are broken packages. Trying to fix them..."
-        sudo apt --fix-broken install -y
+    if [ "$PM" = "apt-get" ]; then
+        echo "Checking and fixing dpkg interruptions..."
+        sudo dpkg --configure -a
+        sudo apt-get check
         if [ $? -ne 0 ]; then
-            echo "Failed to fix broken packages automatically. Please fix them manually."
-            exit 1
+            echo "There are broken packages. Trying to fix them..."
+            sudo apt --fix-broken install -y
+            if [ $? -ne 0 ]; then
+                echo "Failed to fix broken packages automatically. Please fix them manually."
+                exit 1
+            fi
         fi
     fi
 }
@@ -32,27 +52,43 @@ check_and_fix_dpkg() {
 # Functions for each operation
 update_package_list() {
     echo "Updating package list..."
-    sudo apt-get update
+    if [ "$PM" = "pacman" ]; then
+        sudo pacman -Sy
+    else
+        sudo $PM update -y
+    fi
 }
 
 upgrade_installed_packages() {
     echo "Upgrading installed packages..."
-    sudo apt-get upgrade -y
+    if [ "$PM" = "pacman" ]; then
+        sudo pacman -Su
+    else
+        sudo $PM upgrade -y
+    fi
 }
 
 distribution_upgrade() {
     echo "Performing distribution upgrade..."
-    sudo apt-get dist-upgrade -y
+    sudo $PM $DIST_UPGRADE -y
 }
 
 remove_unnecessary_packages() {
     echo "Removing unnecessary packages..."
-    sudo apt-get autoremove -y
+    if [ "$PM" = "pacman" ]; then
+        sudo pacman -Rns $(pacman -Qtdq) || echo "No orphan packages to remove."
+    else
+        sudo $PM autoremove -y
+    fi
 }
 
 clean_package_cache() {
     echo "Cleaning package cache..."
-    sudo apt-get clean
+    if [ "$PM" = "pacman" ]; then
+        sudo pacman -Scc --noconfirm
+    else
+        sudo $PM clean
+    fi
 }
 
 # Function to perform all operations
@@ -87,7 +123,10 @@ display_menu() {
     esac
 }
 
-# Ensure dpkg configuration and dependencies are fixed before proceeding
+# Detect package manager
+detect_package_manager
+
+# Ensure dpkg configuration and dependencies are fixed before proceeding (if using apt-get)
 check_and_fix_dpkg
 
 # Process arguments
